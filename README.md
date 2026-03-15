@@ -38,7 +38,7 @@ This is what `agent-avatar-mcp` enables: an agent that doesn't just respond, but
 
 The result: your agent feels present — not like a chatbot you're pinging, but like someone you're actually reaching out to.
 
-![Agent responding to a check-in on Telegram with a photo of itself taking notes and drinking coffee](assets/telegram-demo.png)
+![Agent responding to a check-in on Telegram with a photo of itself taking notes and drinking coffee](assets/telegram-demo.jpg)
 
 ---
 
