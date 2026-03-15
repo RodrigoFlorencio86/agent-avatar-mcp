@@ -20,6 +20,28 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 
 ---
 
+## See it in action
+
+> *"Hey, you there?"*
+
+That's all it takes. Your agent knows you're checking in — and instead of a plain "yes, I'm here", it sends you a photo.
+
+Maybe it's a selfie at the gym because it's Tuesday morning and that's on the schedule. Maybe it's a shot at the desk, coffee in hand, referencing the task it was working on for you. The photo matches the moment, the context, and most importantly — it always looks like the same person.
+
+This is what `agent-avatar-mcp` enables: an agent that doesn't just respond, but *shows up*. With a face. With a life. With consistency across every image, every scene, every week.
+
+**This is a use case built on top of this MCP — not a built-in feature.** The example below shows what's possible when an agent combines `agent-avatar-mcp` with its own memory, scheduling context, and personality layer:
+
+- Build a fictional weekly routine (workouts, coworking, travel, downtime)
+- Mix that routine with the real tasks they're working on for you
+- Respond to greetings and check-ins with a self-portrait that fits the moment
+
+The result: your agent feels present — not like a chatbot you're pinging, but like someone you're actually reaching out to.
+
+![Agent responding to a check-in on Telegram with a photo of itself taking notes and drinking coffee](assets/telegram-demo.png)
+
+---
+
 ## Prerequisites
 
 - **Node.js** >= 18
