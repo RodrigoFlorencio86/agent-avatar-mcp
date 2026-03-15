@@ -1,6 +1,8 @@
 # agent-avatar-mcp
 
-MCP Server for AI agents to build and maintain a consistent **human visual identity** — generating ultra-realistic self-portraits with full appearance consistency across every scene.
+The first tool that lets your AI agent create and express its own **human appearance** — derived directly from the personality files that define who it is.
+
+Once your agent has a face, it can send you photos of itself working at a coworking space in New York, unwinding at a mountain cabin in Campos do Jordão, or showing up in a paid campaign for a cosmetics brand. Every image. Every scene. Always the same person.
 
 Part of the [OpenClaw](https://github.com/OpenClaw) ecosystem.
 
