@@ -81,6 +81,8 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 }
 ```
 
+> **Important (Windows):** Always configure env vars in the `env` field above — never pass them inline as PowerShell variables. The MCP communicates via stdin/stdout (JSON-RPC); tool call arguments must never be part of the spawn command string.
+>
 > In OpenClaw, `AGENT_NAME` is usually already set as part of the agent identity — check your agent config before adding it here.
 
 ### Environment variables
