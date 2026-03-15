@@ -63,6 +63,26 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 }
 ```
 
+### OpenClaw (`mcporter.json`)
+
+```json
+{
+  "mcpServers": {
+    "agent-avatar": {
+      "command": "npx",
+      "args": ["-y", "agent-avatar-mcp"],
+      "type": "stdio",
+      "env": {
+        "AGENT_NAME": "YourAgentName",
+        "GEMINI_API_KEY": "your-gemini-api-key-here"
+      }
+    }
+  }
+}
+```
+
+> In OpenClaw, `AGENT_NAME` is usually already set as part of the agent identity — check your agent config before adding it here.
+
 ### Environment variables
 
 | Variable | Required | Description |
