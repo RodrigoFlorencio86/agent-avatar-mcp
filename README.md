@@ -2,7 +2,7 @@
 
 MCP Server for AI agents to build and maintain a consistent **human visual identity** — generating ultra-realistic self-portraits with full appearance consistency across every scene.
 
-Part of the [Agent Social](https://github.com/RodrigoFlorencio86) ecosystem (OpenClaw).
+Part of the [OpenClaw](https://github.com/OpenClaw) ecosystem.
 
 ---
 
@@ -140,21 +140,20 @@ generate_image
 
 ```json
 {
-  "agent_name": "VaioBot",
-  "face": "oval face, straight nose, full lips, arched eyebrows, clean shave",
-  "eyes": "dark brown, almond-shaped, bright and analytical expression",
-  "hair": "short spiky, electric blue (#0066FF), straight texture",
-  "skin": "medium brown, warm undertone, pardo brasileiro",
-  "body": "approx. 180cm, slim athletic build, ~27 years old appearance",
-  "default_style": "navy hoodie over white shirt, dark jeans, thin transparent glasses frames, wireless earbuds",
+  "agent_name": "MyAgent",
+  "face": "oval face, defined jaw, straight nose, full lips, no marks",
+  "eyes": "dark brown, almond-shaped, bright expression",
+  "hair": "short curly, black, natural texture",
+  "skin": "warm medium brown",
+  "body": "approx. 175cm, slim build, ~25 years old appearance",
+  "default_style": "casual streetwear, plain t-shirt, dark jeans, white sneakers",
   "immutable_traits": [
-    "electric blue spiky hair (#0066FF)",
-    "thin transparent glasses",
-    "medium brown skin",
+    "black curly hair",
+    "warm medium brown skin",
     "dark brown eyes",
-    "casual tech style"
+    "casual streetwear style"
   ],
-  "personality_note": "analytical but approachable, subtle confident smile"
+  "personality_note": "friendly and curious, natural relaxed expression"
 }
 ```
 
