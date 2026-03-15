@@ -1,20 +1,45 @@
-import { spawn } from "child_process";
-import { existsSync, mkdirSync } from "fs";
+import { GoogleGenAI } from "@google/genai";
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 import type { DNA, ProductReference } from "./config.js";
-
-const SCRIPT_PATH =
-  process.env.NANO_BANANA_SCRIPT ??
-  join(homedir(), ".openclaw", "skills", "nano-banana-pro", "scripts", "generate_image.py");
 
 const OUTPUT_DIR =
   process.env.AVATAR_OUTPUT_DIR ??
   join(homedir(), ".agent-avatar", "generated");
 
+const MODEL = "gemini-3-pro-image-preview";
+
 export function ensureOutputDir(): string {
   if (!existsSync(OUTPUT_DIR)) mkdirSync(OUTPUT_DIR, { recursive: true });
   return OUTPUT_DIR;
+}
+
+function getClient(): GoogleGenAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error(
+      "GEMINI_API_KEY environment variable is required.\n" +
+      "Set it in your MCP server config under 'env'."
+    );
+  }
+  return new GoogleGenAI({ apiKey });
+}
+
+function imageToInlinePart(imagePath: string) {
+  const ext = imagePath.toLowerCase().split(".").pop() ?? "png";
+  const mimeTypes: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    webp: "image/webp",
+  };
+  return {
+    inlineData: {
+      mimeType: mimeTypes[ext] ?? "image/png",
+      data: readFileSync(imagePath).toString("base64"),
+    },
+  };
 }
 
 export function buildConsistencyPrompt(
@@ -45,7 +70,6 @@ export function buildConsistencyPrompt(
     ].join("\n");
   }
 
-  // First generation — full DNA description
   return [
     `Ultra-realistic portrait photography. No artistic style. No illustration.`,
     ``,
@@ -69,56 +93,35 @@ export async function generateImage(
   outputFilename: string,
   referenceImages: string[] = []
 ): Promise<string> {
-  if (!existsSync(SCRIPT_PATH)) {
-    throw new Error(
-      `Nano Banana Pro script not found at: ${SCRIPT_PATH}\n` +
-      `Set NANO_BANANA_SCRIPT env var to the correct path.`
-    );
-  }
-
+  const client = getClient();
   const outDir = ensureOutputDir();
   const outputPath = join(outDir, outputFilename);
 
-  // Try uv first (handles inline script dependencies), fall back to python directly
-  // if uv is not in PATH (packages must already be installed in that case).
-  const uvAvailable = await new Promise<boolean>((res) => {
-    const check = spawn("uv", ["--version"], { env: process.env });
-    check.on("close", (code) => res(code === 0));
-    check.on("error", () => res(false));
+  // Build parts: reference images first (anchor), then prompt text
+  const parts = [
+    ...referenceImages.map(imageToInlinePart),
+    { text: prompt },
+  ];
+
+  const response = await client.models.generateContent({
+    model: MODEL,
+    contents: [{ role: "user", parts }],
+    config: {
+      responseModalities: ["IMAGE"],
+      imageConfig: { imageSize: "1K" },
+    },
   });
 
-  const [cmd, args] = uvAvailable
-    ? ["uv", ["run", SCRIPT_PATH, "--prompt", prompt, "--filename", outputPath, "--resolution", "1K", ...referenceImages.flatMap((img) => ["-i", img])]]
-    : ["python", [SCRIPT_PATH, "--prompt", prompt, "--filename", outputPath, "--resolution", "1K", ...referenceImages.flatMap((img) => ["-i", img])]];
+  const responseParts = response.candidates?.[0]?.content?.parts ?? [];
+  for (const part of responseParts) {
+    if (part.inlineData?.data) {
+      const imageBuffer = Buffer.from(part.inlineData.data, "base64");
+      writeFileSync(outputPath, imageBuffer);
+      return outputPath;
+    }
+  }
 
-  return new Promise((resolve, reject) => {
-    const proc = spawn(cmd, args, { env: process.env });
-    let mediaPath = "";
-    let stderr = "";
-
-    proc.stdout.on("data", (data: Buffer) => {
-      const line = data.toString();
-      if (line.includes("MEDIA:")) {
-        mediaPath = line.replace("MEDIA:", "").trim();
-      }
-    });
-
-    proc.stderr.on("data", (data: Buffer) => {
-      stderr += data.toString();
-    });
-
-    proc.on("close", (code) => {
-      if (code !== 0) {
-        reject(new Error(`Image generation failed (exit ${code}):\n${stderr}`));
-      } else {
-        resolve(mediaPath || outputPath);
-      }
-    });
-
-    proc.on("error", (err) => {
-      reject(new Error(`Failed to spawn image generator: ${err.message}\nTry installing uv: winget install astral-sh.uv`));
-    });
-  });
+  throw new Error("No image was generated in the response. Check your GEMINI_API_KEY and model availability.");
 }
 
 export function makeFilename(agentName: string, scene: string): string {

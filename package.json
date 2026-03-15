@@ -1,12 +1,15 @@
 {
   "name": "agent-avatar-mcp",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "MCP Server — visual identity and self-portrait generation for AI agents",
   "type": "module",
   "bin": {
     "agent-avatar-mcp": "dist/index.js"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
@@ -15,13 +18,16 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@google/genai": "^1.45.0",
     "@modelcontextprotocol/sdk": "^1.5.0"
   },
   "devDependencies": {
-    "typescript": "^5.4.0",
     "@types/node": "^20.0.0",
-    "tsx": "^4.0.0"
+    "tsx": "^4.0.0",
+    "typescript": "^5.4.0"
   },
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT"
 }

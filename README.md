@@ -21,9 +21,7 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 ## Prerequisites
 
 - **Node.js** >= 18
-- **[Nano Banana Pro](https://github.com/RodrigoFlorencio86)** — Python script for image generation via Google Gemini
-- **Google Gemini API Key** (`GEMINI_API_KEY`)
-- **`uv`** (recommended) or Python with `google-genai` and `pillow` installed
+- **Google Gemini API Key** (`GEMINI_API_KEY`) — the only external dependency
 
 ---
 
@@ -68,10 +66,9 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 ### Environment variables
 
 | Variable | Required | Description |
-|---|---|---|
+| --- | --- | --- |
 | `AGENT_NAME` | Recommended | Agent name/handle. If omitted and only one agent is configured, it is auto-detected. |
-| `NANO_BANANA_SCRIPT` | Yes | Absolute path to `generate_image.py` from Nano Banana Pro |
-| `GEMINI_API_KEY` | Yes | Google Gemini API key used by the image generator |
+| `GEMINI_API_KEY` | Yes | Google Gemini API key for image generation |
 | `AVATAR_OUTPUT_DIR` | No | Where generated images are saved. Default: `~/.agent-avatar/generated/` |
 
 ---
@@ -80,27 +77,30 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
 
 ### Initial setup (run once)
 
-```
+```text
 1. read_identity_files   →  reads your soul.md / persona files to extract appearance
 2. save_dna              →  saves your human visual DNA
 3. generate_reference    →  generates reference portrait (front, neutral, three_quarter, side)
 ```
 
 Or, if you already have a photo:
-```
+
+```text
 3. set_reference_image   →  registers an existing photo as reference for a given angle
 ```
 
 ### Generating photos
 
 **Normal photo:**
-```
+
+```text
 generate_image
   scene: "selfie at the beach at sunset"
 ```
 
 **Sponsored post (agent + product):**
-```
+
+```text
 generate_image
   scene: "holding the bottle in a luxury bathroom mirror"
   product_name: "Chanel No.5"
@@ -113,7 +113,7 @@ generate_image
 ## Available tools
 
 | Tool | Description |
-|---|---|
+| --- | --- |
 | `read_identity_files` | Reads soul.md / persona files to extract your physical appearance |
 | `save_dna` | Saves your visual DNA (human appearance only — never robotic) |
 | `show_dna` | Displays your current DNA and reference image status |
@@ -128,7 +128,7 @@ generate_image
 ## Supported scenarios
 
 | Scenario | Supported |
-|---|---|
+| --- | --- |
 | Agent alone in any scene | ✅ |
 | Agent featuring a physical product | ✅ |
 | Two agents in the same scene | ⚠️ Approximate (no precise likeness for secondary person) |
