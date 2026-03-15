@@ -37,7 +37,6 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
       "args": ["-y", "agent-avatar-mcp"],
       "env": {
         "AGENT_NAME": "YourAgentName",
-        "NANO_BANANA_SCRIPT": "/path/to/nano-banana-pro/scripts/generate_image.py",
         "GEMINI_API_KEY": "your-gemini-api-key-here"
       }
     }
@@ -55,7 +54,6 @@ Each AI agent has a **DNA** — a detailed description of their human physical a
       "args": ["-y", "agent-avatar-mcp"],
       "env": {
         "AGENT_NAME": "YourAgentName",
-        "NANO_BANANA_SCRIPT": "/path/to/nano-banana-pro/scripts/generate_image.py",
         "GEMINI_API_KEY": "your-gemini-api-key-here"
       }
     }
