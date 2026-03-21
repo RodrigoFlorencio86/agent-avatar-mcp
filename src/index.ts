@@ -405,6 +405,22 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       // ── generate_image ─────────────────────────────────────────────────────
       case "generate_image": {
+        if (!args.scene || typeof args.scene !== "string") {
+          return {
+            content: [{
+              type: "text",
+              text: [
+                `❌ Missing required argument: "scene".`,
+                ``,
+                `Provide a natural language description of the scene as a JSON string.`,
+                ``,
+                `Example:`,
+                `  { "scene": "selfie at a São Paulo coworking space, afternoon light" }`,
+              ].join("\n"),
+            }],
+            isError: true,
+          };
+        }
         const config = requireConfig(args.agent_name as string | undefined);
         const scene = args.scene as string;
         const anglePreference = (args.use_reference_angle as string) ?? "best";
@@ -466,6 +482,23 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       // ── generate_reference ─────────────────────────────────────────────────
       case "generate_reference": {
+        const validAngles = ["front", "side", "three_quarter", "neutral"];
+        if (!args.angle || !validAngles.includes(args.angle as string)) {
+          return {
+            content: [{
+              type: "text",
+              text: [
+                `❌ Missing or invalid argument: "angle".`,
+                ``,
+                `Valid values: "front", "side", "three_quarter", "neutral"`,
+                ``,
+                `Example:`,
+                `  { "angle": "front" }`,
+              ].join("\n"),
+            }],
+            isError: true,
+          };
+        }
         const config = requireConfig(args.agent_name as string | undefined);
         const angle = args.angle as "front" | "side" | "three_quarter" | "neutral";
 
