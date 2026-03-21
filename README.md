@@ -164,16 +164,16 @@ generate_image
 
 ## Available tools
 
-| Tool | Description |
-| --- | --- |
-| `read_identity_files` | Reads soul.md / persona files to extract your physical appearance |
-| `save_dna` | Saves your visual DNA (human appearance only — never robotic) |
-| `show_dna` | Displays your current DNA and reference image status |
-| `update_dna_field` | Updates a single DNA field without rewriting everything |
-| `generate_reference` | Generates a reference portrait from DNA for a given angle |
-| `generate_image` | Generates a scene photo maintaining full visual consistency |
-| `set_reference_image` | Registers an existing image file as a reference for a given angle |
-| `list_references` | Lists all stored reference images and their angles |
+| Tool | Description | When to use |
+| --- | --- | --- |
+| `generate_image` | Generates a scene photo of the agent maintaining full visual consistency | 🔁 **Every generation** — every selfie, every social post, every sponsored content piece. This is the core tool you will call constantly. |
+| `show_dna` | Displays current DNA and reference image status | 🔍 **On demand** — whenever you want to verify what appearance is stored, check which references are registered, or troubleshoot inconsistency in generated images. |
+| `list_references` | Lists all stored reference images and their angles | 🔍 **On demand** — to see which angles (front, side, three_quarter, neutral) are available as visual anchors, and confirm file paths are valid. |
+| `update_dna_field` | Updates a single DNA field without rewriting everything | ✏️ **Rarely** — only when the agent's appearance genuinely changes: a new haircut, different hair color, a style shift, new glasses. Real human changes, not corrections. |
+| `generate_reference` | Generates a reference portrait from DNA for a given angle | ✏️ **Rarely** — after an appearance change (`update_dna_field`), the old reference no longer matches. Regenerate the affected angles to keep the visual anchor in sync with the new DNA. |
+| `set_reference_image` | Registers an existing image file as a reference for a given angle | ✏️ **Rarely** — when a photo already exists (e.g. from a previous session or an external shoot) and you want to use it as the reference instead of generating a new one. |
+| `read_identity_files` | Reads soul.md / persona files to extract physical appearance details | 🛠️ **Setup only** — run once when first building the agent's visual identity, to extract appearance data from existing persona documents before calling `save_dna`. |
+| `save_dna` | Saves the agent's visual DNA (human appearance only — never robotic) | 🛠️ **Setup only** — run once to establish identity. Run again only if the agent undergoes a complete appearance overhaul that makes the previous DNA obsolete. |
 
 ---
 
