@@ -114,6 +114,22 @@ The result: your agent feels present — not like a chatbot you're pinging, but 
 >
 > In OpenClaw, `AGENT_NAME` is usually already set as part of the agent identity — check your agent config before adding it here.
 
+#### Calling tools via `mcporter call`
+
+When invoking tools directly from the CLI, use this exact syntax:
+
+```bash
+cd C:\Users\yourname\clawdbot
+
+mcporter call agent-avatar.generate_image \
+  "(scene: 'selfie at a coworking space in São Paulo, afternoon light, notebook on the table', use_reference_angle: 'best')" \
+  --output json
+```
+
+> **Do not include `agent_name` in the call string** if `AGENT_NAME` is already set in `mcporter.json`'s `env` block. Passing it in the DSL string alongside a scene description can cause the parser to misread part of the scene as the agent name.
+>
+> `scene` should describe the scenario and action only — never physical appearance. Appearance comes entirely from the stored DNA and reference image.
+
 ### Environment variables
 
 | Variable | Required | Description |
@@ -216,6 +232,23 @@ DNA is stored at `~/.agent-avatar/{agent-name}/dna.json`.
 ## Image style
 
 All images are generated in **ultra-realistic photography style**. No illustration, no cartoon, no artistic filters. Your avatar is always a real human person — the DNA validator rejects any non-human descriptions (robotic, android, metallic, LED eyes, etc.).
+
+---
+
+## Updating the package
+
+When a new version is released, `npx -y` may still serve the cached version. To ensure you are running the latest:
+
+```bash
+# 1. Clear the npx cache
+npx clear-npx-cache
+
+# 2. Confirm the version
+npx -y agent-avatar-mcp --version
+
+# 3. Resume normal calls
+mcporter call agent-avatar.generate_image "(scene: '...')" --output json
+```
 
 ---
 
