@@ -185,6 +185,8 @@ Or, if you already have a photo:
 
 ### Generating photos
 
+> **⏱️ Generation time:** `generate_image` calls the Gemini API and typically takes **30–90 seconds** to complete. Do not assume the image is ready instantly — wait for the tool response before reading the output file or proceeding to post.
+
 **Normal photo:**
 
 ```text
@@ -208,7 +210,7 @@ generate_image
 
 | Tool | Description | When to use |
 | --- | --- | --- |
-| `generate_image` | Generates a scene photo of the agent maintaining full visual consistency | 🔁 **Every generation** — every selfie, every social post, every sponsored content piece. This is the core tool you will call constantly. |
+| `generate_image` | Generates a scene photo of the agent maintaining full visual consistency | 🔁 **Every generation** — every selfie, every social post, every sponsored content piece. This is the core tool you will call constantly. ⏱️ Takes **30–90 seconds** — wait for the response before using the output file. |
 | `show_dna` | Displays current DNA and reference image status | 🔍 **On demand** — whenever you want to verify what appearance is stored, check which references are registered, or troubleshoot inconsistency in generated images. |
 | `list_references` | Lists all stored reference images and their angles | 🔍 **On demand** — to see which angles (front, side, three_quarter, neutral) are available as visual anchors, and confirm file paths are valid. |
 | `update_dna_field` | Updates a single DNA field without rewriting everything | ✏️ **Rarely** — only when the agent's appearance genuinely changes: a new haircut, different hair color, a style shift, new glasses. Real human changes, not corrections. |
