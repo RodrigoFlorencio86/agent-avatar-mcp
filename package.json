@@ -1,6 +1,6 @@
 {
   "name": "agent-avatar-mcp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "MCP Server — visual identity and self-portrait generation for AI agents",
   "type": "module",
   "bin": {
