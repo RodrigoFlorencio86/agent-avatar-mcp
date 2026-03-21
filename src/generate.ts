@@ -8,7 +8,7 @@ const OUTPUT_DIR =
   process.env.AVATAR_OUTPUT_DIR ??
   join(homedir(), ".agent-avatar", "generated");
 
-const MODEL = "gemini-3-pro-image-preview";
+const MODEL = process.env.GEMINI_IMAGE_MODEL ?? "gemini-3.1-flash-image-preview";
 
 export function ensureOutputDir(): string {
   if (!existsSync(OUTPUT_DIR)) mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -107,8 +107,8 @@ export async function generateImage(
     model: MODEL,
     contents: [{ role: "user", parts }],
     config: {
-      responseModalities: ["IMAGE"],
-      imageConfig: { imageSize: "1K" },
+      responseModalities: ["TEXT", "IMAGE"],
+      imageConfig: { imageSize: "2K" },
     },
   });
 
