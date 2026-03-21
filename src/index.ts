@@ -33,6 +33,36 @@ const server = new Server(
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// mcporter CLI passes tool args as a positional "(key: 'val', key2: 'val2')"
+// string. Because it splits on the first ":" only, the MCP server receives
+// { "(key": "'val', key2: 'val2')" } instead of { key: "val", key2: "val2" }.
+// This function detects that shape and re-parses it into a normal args object.
+function normalizeMcporterArgs(args: Record<string, unknown>): Record<string, unknown> {
+  const keys = Object.keys(args);
+  if (keys.length !== 1 || !keys[0].startsWith("(")) return args;
+
+  // Reconstruct the full DSL string, e.g. "(scene: 'valor', angle: 'front')"
+  const fullStr = keys[0] + ": " + String(args[keys[0]]);
+  const content = fullStr.replace(/^\(/, "").replace(/\)$/, "");
+
+  const result: Record<string, unknown> = {};
+
+  // Match key: 'value' — single-quoted, handles commas and colons inside quotes
+  const quotedRe = /(\w+):\s*'((?:[^'\\]|\\.)*)'/g;
+  let m;
+  while ((m = quotedRe.exec(content)) !== null) {
+    result[m[1]] = m[2];
+  }
+
+  // Match key: value — unquoted (enums, simple strings)
+  const unquotedRe = /(\w+):\s*([^',)\s][^',)]*?)(?:\s*,|\s*$)/g;
+  while ((m = unquotedRe.exec(content)) !== null) {
+    if (!(m[1] in result)) result[m[1]] = m[2].trim();
+  }
+
+  return Object.keys(result).length > 0 ? result : args;
+}
+
 function requireConfig(agentName?: string): AvatarConfig {
   const name = agentName ?? getActiveAgentName();
   if (!name) throw new Error("No agent configured. Use `save_dna` first.");
@@ -222,7 +252,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 // ─── Tool handlers ────────────────────────────────────────────────────────────
 
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name, arguments: args = {} } = request.params;
+  const { name, arguments: rawArgs = {} } = request.params;
+  const args = normalizeMcporterArgs(rawArgs as Record<string, unknown>);
 
   try {
     switch (name) {
@@ -411,8 +442,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               type: "text",
               text: [
                 `❌ Missing required argument: "scene".`,
-                ``,
-                `Received args: ${JSON.stringify(args)}`,
                 ``,
                 `Provide a natural language description of the scene as a JSON string.`,
                 ``,
