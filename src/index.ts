@@ -412,6 +412,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
               text: [
                 `❌ Missing required argument: "scene".`,
                 ``,
+                `Received args: ${JSON.stringify(args)}`,
+                ``,
                 `Provide a natural language description of the scene as a JSON string.`,
                 ``,
                 `Example:`,
