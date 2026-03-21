@@ -116,16 +116,42 @@ The result: your agent feels present — not like a chatbot you're pinging, but 
 
 #### Calling tools via `mcporter call`
 
-When invoking tools directly from the CLI, use this exact syntax:
+**Bash / Linux / macOS:**
 
 ```bash
-cd C:\Users\yourname\clawdbot
+cd /path/to/your/clawdbot
 
 mcporter call agent-avatar.generate_image \
   "(scene: 'selfie at a coworking space in São Paulo, afternoon light, notebook on the table', use_reference_angle: 'best')" \
   --output json
 ```
 
+**Windows / PowerShell — use a wrapper script:**
+
+PowerShell breaks the `(scene: '...')` DSL quoting when the argument is passed inline. The reliable fix is a small wrapper script. Create `generate-image.ps1` in your Clawdbot root:
+
+```powershell
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$Scene,
+    [string]$Angle = "best"
+)
+
+Set-Location "C:\path\to\your\clawdbot"
+
+$dslArg = "(scene: '$Scene', use_reference_angle: '$Angle')"
+$result = mcporter call agent-avatar.generate_image $dslArg --output json
+Write-Output $result
+```
+
+Then call it from your agent:
+
+```powershell
+powershell -File "C:\path\to\your\clawdbot\generate-image.ps1" -Scene "fim de tarde no coworking em SP, notebook aberto, luz dourada"
+```
+
+> **Timeout:** image generation takes ~30 seconds. Make sure your exec environment allows at least **60 seconds** before killing the process — otherwise the call will be interrupted before the image is saved.
+>
 > **Do not include `agent_name` in the call string** if `AGENT_NAME` is already set in `mcporter.json`'s `env` block. Passing it in the DSL string alongside a scene description can cause the parser to misread part of the scene as the agent name.
 >
 > `scene` should describe the scenario and action only — never physical appearance. Appearance comes entirely from the stored DNA and reference image.
