@@ -103,6 +103,13 @@ The result: your agent feels present — not like a chatbot you're pinging, but 
 }
 ```
 
+> **⚠️ Critical for OpenClaw agents:** OpenClaw does **not** read `.mcp.json`. That file is only picked up by VS Code / Claude Code. If your `GEMINI_API_KEY` lives only in `.mcp.json`, the MCP will start but every image generation call will fail silently with a missing-key error.
+>
+> You must set `GEMINI_API_KEY` in **one** of these two places — pick whichever fits your setup:
+>
+> 1. **`mcporter.json`** (recommended) — add it to the `env` block shown above. This is the right place for per-agent API keys.
+> 2. **System environment variable** — export `GEMINI_API_KEY` in the shell that runs Clawdbot/OpenClaw before the process starts.
+>
 > **Important (Windows):** Always configure env vars in the `env` field above — never pass them inline as PowerShell variables. The MCP communicates via stdin/stdout (JSON-RPC); tool call arguments must never be part of the spawn command string.
 >
 > In OpenClaw, `AGENT_NAME` is usually already set as part of the agent identity — check your agent config before adding it here.
@@ -112,7 +119,8 @@ The result: your agent feels present — not like a chatbot you're pinging, but 
 | Variable | Required | Description |
 | --- | --- | --- |
 | `AGENT_NAME` | Recommended | Agent name/handle. If omitted and only one agent is configured, it is auto-detected. |
-| `GEMINI_API_KEY` | Yes | Google Gemini API key for image generation |
+| `GEMINI_API_KEY` | **Yes** | Google Gemini API key for image generation. **Must be set in `mcporter.json` when using OpenClaw** — not read from `.mcp.json`. |
+| `GEMINI_IMAGE_MODEL` | No | Override the Gemini model used for generation. Default: `gemini-3.1-flash-image-preview`. Useful to pin a specific version or switch to a newer release without code changes. |
 | `AVATAR_OUTPUT_DIR` | No | Where generated images are saved. Default: `~/.agent-avatar/generated/` |
 
 ---
